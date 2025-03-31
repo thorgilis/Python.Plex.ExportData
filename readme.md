@@ -17,7 +17,7 @@ This project provides utilities to export and analyze data from your Plex Media 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Python.Plex.ExportData.git
+git clone https://github.com/thorgilis/Python.Plex.ExportData.git
 cd Python.Plex.ExportData
 ```
 
