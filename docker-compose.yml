@@ -1,0 +1,14 @@
+services:
+  plex-export:
+    image: 192.168.0.63:5000/plex-export:latest
+    container_name: plex-export
+    environment:
+      - PLEX_BASE_URL=${PLEX_BASE_URL}
+      - PLEX_TOKEN=${PLEX_TOKEN}
+      - DB_HOST=${DB_HOST:-192.168.0.63}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_NAME=${DB_NAME:-plex_stats}
+      - DB_USER=${DB_USER:-myuser}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CRON_SCHEDULE=${CRON_SCHEDULE:-0 3 * * *}
+    restart: "no"

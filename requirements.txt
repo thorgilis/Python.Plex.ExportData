@@ -1,3 +1,4 @@
 PlexAPI==4.16.1
 python-dotenv==1.1.0
 SQLAlchemy==2.0.40
+psycopg2-binary==2.9.9

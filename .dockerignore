@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+
+# Env files and secrets
+.env
+.env.*
+
+# OS/editor
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Caches
+*.log
+.cache/
+.mypy_cache/
+.pytest_cache/
+
+# Tests/artifacts
+coverage/
+htmlcov/

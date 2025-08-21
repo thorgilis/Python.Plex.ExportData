@@ -27,7 +27,7 @@ PLEX_TOKEN = os.getenv('PLEX_TOKEN')
 DB_HOST = os.getenv('DB_HOST', '192.168.0.63')
 DB_NAME = os.getenv('DB_NAME', 'plex_stats')
 DB_USER = os.getenv('DB_USER', 'myuser')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_PASS = os.getenv('DB_PASSWORD')
 DB_PORT = os.getenv('DB_PORT', '5432')
 
 
@@ -47,11 +47,11 @@ def connect_to_plex():
 
 def create_db_engine():
     """Create SQLAlchemy engine for PostgreSQL"""
-    if not DB_PASSWORD:
+    if not DB_PASS:
         logger.error("DB_PASSWORD environment variable not set")
         raise ValueError("DB_PASSWORD environment variable not set")
     
-    connection_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    connection_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     engine = create_engine(connection_string)
     logger.info("Created SQLAlchemy engine for PostgreSQL database")
     return engine
@@ -81,6 +81,13 @@ def calculate_percent_complete(media_item, history_item):
 def fetch_and_store_movies(plex, session):
     """Fetch movies from Plex and store in PostgreSQL"""
     try:
+        plex_users = {}
+        for user in plex.myPlexAccount().users():
+            plex_users[user.id] = user.username
+        
+        # Also add the owner account
+        plex_users[1] = 'Me'
+    
         # Get all movie sections
         movie_sections = [section for section in plex.library.sections() if section.type == 'movie']
         
@@ -197,11 +204,15 @@ def fetch_and_store_movies(plex, session):
                             # Calculate percentage complete
                             percent_complete = calculate_percent_complete(movie, item)
                             
+                            # Get Vals
+                            accId = item.accountID if hasattr(item, 'accountID') else None
+                            accName = plex_users.get(accId, 'Unknown')
+
                             # Create history record
                             play_history = PlayHistory(
                                 movie_id=db_movie.id,
-                                account_id=item.accountID if hasattr(item, 'accountID') else None,
-                                account_name=item.accountName if hasattr(item, 'accountName') else None,
+                                account_id=accId,
+                                account_name=accName,
                                 device_name=item.deviceName if hasattr(item, 'deviceName') else None,
                                 played_at=played_at,
                                 percent_complete=percent_complete
@@ -223,6 +234,8 @@ def main():
     try:
         # Connect to Plex
         plex = connect_to_plex()
+
+        plex.sessions()
         
         # Create database engine
         engine = create_db_engine()
