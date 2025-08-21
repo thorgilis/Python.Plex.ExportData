@@ -1,19 +1,24 @@
 # Plex Export Data
 
-A Python-based tool for exporting and managing Plex Media Server data.
+Export and analyze Plex Media Server data. Run it once or put it on a schedule. Funky, but not flashy.
 
-## Description
+## Features ✨
+- Export Plex library metadata and watch history
+- Generate lightweight library statistics
+- Run once or on a cron schedule inside Docker
+- Minimal footprint based on `python:3.12-slim`
 
-This project provides utilities to export and analyze data from your Plex Media Server, allowing you to backup and analyse your media library information effectively.
+## How it works
+- If `CRON_SCHEDULE` is unset/empty: the app runs `python app/main.py` once, then exits
+- If `CRON_SCHEDULE` is set: a cron job runs `/usr/local/bin/run-etl.sh` (calls `python app/main.py`) on schedule and tails logs
 
 ## Prerequisites
 
-- Python 3.12 or higher
-- Plex Media Server installed and running
-- Plex authentication token
+- Python 3.12 or higher (for local dev)
+- Plex Media Server and auth token
 - Git (for cloning the repository)
 
-## Installation
+## Installation (Python)
 
 1. Clone the repository:
 ```bash
@@ -24,32 +29,27 @@ cd Python.Plex.ExportData
 2. Create a virtual environment (recommended):
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-3. Install required dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Configuration
 
-1. Copy the `.env.example` to `.env`
-2. Add your Plex server details and authentication token to `.env`
+Create a `.env` file with your Plex and database settings. See the example below.
 
-## Usage
+## Usage (Python)
 
-Run the main script:
 ```bash
 python app/main.py
 ```
 
-## Features
+### Docker
 
-- Export Plex library metadata
-- Backup movie and TV show information
-- Generate library statistics
-- Export watch history
+For docker instructions please see the [Docker Hub Page](https://hub.docker.com/r/thorgilis/plex-movie-export)
 
 ## Contributing
 
