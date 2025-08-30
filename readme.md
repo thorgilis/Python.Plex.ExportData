@@ -62,3 +62,5 @@ For docker instructions please see the [Docker Hub Page](https://hub.docker.com/
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+docker buildx build --platform linux/amd64 -t plex-export:latest --push .

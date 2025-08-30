@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 cd /app
-python app/main.py
+/usr/local/bin/python app/main.py
 
 
 
